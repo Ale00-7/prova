@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress Bar - Settimana, Mese, Anno</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .progress-container {
+            margin: 20px auto;
+            width: 80%;
+            max-width: 400px;
+        }
+        .progress-bar {
+            width: 100%;
+            background-color: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 20px;
+            background-color: #4caf50;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            width: 0;
+        }
+    </style>
+</head>
+<body>
+    <h2>Avanzamento del tempo</h2>
+    <div class="progress-container">
+        <p>Settimana: <span id="week-text"></span>%</p>
+        <div class="progress-bar"><div class="progress-fill" id="week-bar"></div></div>
+    </div>
+    <div class="progress-container">
+        <p>Mese: <span id="month-text"></span>%</p>
+        <div class="progress-bar"><div class="progress-fill" id="month-bar"></div></div>
+    </div>
+    <div class="progress-container">
+        <p>Anno: <span id="year-text"></span>%</p>
+        <div class="progress-bar"><div class="progress-fill" id="year-bar"></div></div>
+    </div>
+    <script>
+        function updateProgress() {
+            const now = new Date();
+            
+            // Calcolo della settimana
+            const startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - now.getDay());
+            const weekProgress = ((now - startOfWeek) / (7 * 24 * 60 * 60 * 1000)) * 100;
+            
+            // Calcolo del mese
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            const monthProgress = ((now - startOfMonth) / (endOfMonth - startOfMonth)) * 100;
+            
+            // Calcolo dell'anno
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const endOfYear = new Date(now.getFullYear(), 11, 31);
+            const yearProgress = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
+            
+            // Aggiornamento delle barre
+            document.getElementById("week-bar").style.width = weekProgress + "%";
+            document.getElementById("week-text").innerText = weekProgress.toFixed(2);
+            
+            document.getElementById("month-bar").style.width = monthProgress + "%";
+            document.getElementById("month-text").innerText = monthProgress.toFixed(2);
+            
+            document.getElementById("year-bar").style.width = yearProgress + "%";
+            document.getElementById("year-text").innerText = yearProgress.toFixed(2);
+        }
+        
+        updateProgress();
+    </script>
+</body>
+</html>
