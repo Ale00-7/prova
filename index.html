@@ -39,7 +39,7 @@
             overflow: hidden;
         }
         .progress {
-            height: 12px;
+            height: 14px;
             background-color: #2D9964;
             width: 0%; /* Questo sarà aggiornato con JS */
         }
@@ -75,11 +75,16 @@
             const now = new Date();
             const startOfYear = new Date(now.getFullYear(), 0, 1);
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-            const startOfWeek = new Date(now.setDate(now.getDate() - now.getDay()));
+            const startOfWeek = new Date(now);
+            startOfWeek.setDate(now.getDate() - now.getDay());
+            startOfWeek.setHours(0, 0, 0, 0);
+            
+            const endOfWeek = new Date(startOfWeek);
+            endOfWeek.setDate(startOfWeek.getDate() + 7);
             
             const yearProgress = ((now - startOfYear) / (new Date(now.getFullYear() + 1, 0, 1) - startOfYear)) * 100;
             const monthProgress = ((now - startOfMonth) / (new Date(now.getFullYear(), now.getMonth() + 1, 1) - startOfMonth)) * 100;
-            const weekProgress = ((now - startOfWeek) / (7 * 24 * 60 * 60 * 1000)) * 100;
+            const weekProgress = ((now - startOfWeek) / (endOfWeek - startOfWeek)) * 100;
             
             document.getElementById("weekProgress").style.width = weekProgress + "%";
             document.getElementById("monthProgress").style.width = monthProgress + "%";
