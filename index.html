@@ -17,13 +17,12 @@
         }
 
         .container {
-            width: 90%;
-            max-width: 800px;
-            border: 1px solid #363636;
-            border-radius: 8px;
+            width: 98vw; /* Massima larghezza possibile */
+            max-width: 100%;
+            border: 1px solid #363636; /* Bordo sottile */
+            border-radius: 8px; /* Angoli arrotondati */
             padding: 16px;
             background-color: #191919;
-            box-sizing: border-box;
         }
 
         .progress-container {
@@ -37,18 +36,18 @@
 
         .progress-bar {
             width: 100%;
-            height: 12px;
+            height: 12px; /* Altezza leggermente aumentata */
             background-color: #363636;
             border-radius: 6px;
             position: relative;
-            overflow: hidden;
+            overflow: hidden; /* Evita il problema di sforamento */
         }
 
         .progress {
             height: 100%;
             background-color: #2D9964;
-            border-radius: 6px;
-            max-width: 100%;
+            border-radius: 6px; /* Angoli arrotondati anche alla fine */
+            transition: width 0.3s ease-in-out;
         }
     </style>
 </head>
@@ -79,37 +78,29 @@
             const now = new Date();
 
             // Calcolo settimana (da lunedì a domenica)
-            const dayOfWeek = (now.getDay() + 6) % 7; // Trasformiamo la settimana in 0 (lunedì) - 6 (domenica)
             const startOfWeek = new Date(now);
-            startOfWeek.setDate(now.getDate() - dayOfWeek);
-            startOfWeek.setHours(0, 0, 0, 0);
-
+            startOfWeek.setDate(now.getDate() - (now.getDay() === 0 ? 6 : now.getDay() - 1));
             const endOfWeek = new Date(startOfWeek);
             endOfWeek.setDate(startOfWeek.getDate() + 6);
-            endOfWeek.setHours(23, 59, 59, 999);
-
             const weekProgress = ((now - startOfWeek) / (endOfWeek - startOfWeek)) * 100;
 
             // Calcolo mese
             const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
             const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-            endOfMonth.setHours(23, 59, 59, 999);
-            const monthProgress = ((now - startOfMonth) / (endOfMonth - startOfMonth)) * 100;
+            const monthProgress = Math.min(((now - startOfMonth) / (endOfMonth - startOfMonth)) * 100, 100);
 
             // Calcolo anno
             const startOfYear = new Date(now.getFullYear(), 0, 1);
             const endOfYear = new Date(now.getFullYear() + 1, 0, 0);
-            endOfYear.setHours(23, 59, 59, 999);
             const yearProgress = ((now - startOfYear) / (endOfYear - startOfYear)) * 100;
 
-            // Aggiorna le barre
-            document.getElementById("week-progress").style.width = `${Math.min(weekProgress, 100)}%`;
-            document.getElementById("month-progress").style.width = `${Math.min(monthProgress, 100)}%`;
-            document.getElementById("year-progress").style.width = `${Math.min(yearProgress, 100)}%`;
+            document.getElementById("week-progress").style.width = `${weekProgress}%`;
+            document.getElementById("month-progress").style.width = `${monthProgress}%`;
+            document.getElementById("year-progress").style.width = `${yearProgress}%`;
         }
 
-        window.addEventListener("resize", updateProgressBars);
         updateProgressBars();
+        window.addEventListener('resize', updateProgressBars);
     </script>
 </body>
 </html>
