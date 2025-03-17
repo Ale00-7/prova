@@ -41,6 +41,7 @@
             border-radius: 6px;
             position: relative;
             overflow: hidden; /* Evita il problema di sforamento */
+            margin: 0 2px; /* Ridotto margine laterale */
         }
 
         .progress {
@@ -78,10 +79,14 @@
             const now = new Date();
 
             // Calcolo settimana (da lunedì a domenica)
+            const dayOfWeek = now.getDay();
+            const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
             const startOfWeek = new Date(now);
-            startOfWeek.setDate(now.getDate() - (now.getDay() === 0 ? 6 : now.getDay() - 1));
+            startOfWeek.setDate(now.getDate() - daysSinceMonday);
+            startOfWeek.setHours(0, 0, 0, 0);
             const endOfWeek = new Date(startOfWeek);
             endOfWeek.setDate(startOfWeek.getDate() + 6);
+            endOfWeek.setHours(23, 59, 59, 999);
             const weekProgress = ((now - startOfWeek) / (endOfWeek - startOfWeek)) * 100;
 
             // Calcolo mese
@@ -100,7 +105,7 @@
         }
 
         updateProgressBars();
-        window.addEventListener('resize', updateProgressBars);
+        setInterval(updateProgressBars, 60000); // Aggiornamento ogni minuto
     </script>
 </body>
 </html>
